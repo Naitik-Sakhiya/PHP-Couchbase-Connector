@@ -1,0 +1,40 @@
+<?php
+/***
+This class is couchbase connector which use to connect couchbase with PHP
+14th Jan, 2017
+author @naitik Sakhiya
+mail contact@naitiksakhiya.in
+***/
+const IP = "localhost:8091";
+const BUCKET = "bucket_name";
+
+final class CouchBaseConnect{
+    /**
+     * Call this method to get singleton
+     *
+     * @return UserFactory
+     */
+    public static $bucketName;
+    public static $cluster;
+    public static $bucket;
+    static $inst = null;
+    public static function Instance() {
+        if (static::$inst === null) {
+            static::$inst = new CouchBaseConnect();
+        }
+        return static::$inst;
+    }
+
+    /**
+     * Private actor so nobody else can instance it
+     */
+    private function __construct(){
+		static::$cluster =  new CouchbaseCluster(IP);
+		static::$bucket = static::$cluster->openBucket(BUCKET);
+    }
+
+    public static function ResetConn(){
+        static::$cluster->CloseBucket(static::$bucket);
+    }
+}
+?>
